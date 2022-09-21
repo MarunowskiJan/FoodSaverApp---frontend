@@ -6,10 +6,10 @@
     aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarColor02">
+  <div class="collapse navbar-collapse " id="navbarColor02">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link">Strona główna <span class=" sr-only">(current)</span></a>
+        <a class="nav-link ">Strona główna <span class=" sr-only">(current)</span></a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
@@ -58,11 +58,18 @@
           </div>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><i class="fa fa-users float-right"></i>Dla {{recipe?.serves}} osób
+          <li class="list-group-item"><i class="fa fa-users float-right"></i>Dla
+            {{recipe?.serves}} osób
           </li>
           <li class="list-group-item"><i class="fa fa-clock-o float-right"></i>Czas przygotowania:
             {{recipe?.preparation}}
             minut
+          </li>
+          <li class="list-group-item"><i class="fa fa-pie-chart float-right"></i>
+            <h5>Składniki:</h5>
+            <div *ngFor="let item of recipe.enrolledIngredients">
+              - {{item.name}}
+            </div>
           </li>
         </ul>
         <div class="card-body">
@@ -105,8 +112,7 @@
                 placeholder="Podaj ile wynosi czas przygotowania . . . " required>
             </div>
             <div class="form-group">
-              <label for="rate">Ocena:</label>
-              <input type="text" ngModel name="rate" class="form-control" id="rate" placeholder="Rate" required>
+              <input type="hidden" ngModel name="rate" class="form-control" id="rate" placeholder="Rate">
             </div>
             <div class="form-group">
               <label for="imageUrl">Zdjęcie dania:</label>
@@ -141,29 +147,28 @@
         <div class="modal-body">
           <form #editRecipeForm="ngForm">
             <div class="form-group">
-              <label for="name">Name</label>
+              <label for="name">Nazwa przepisu:</label>
               <input type="text" ngModel="{{editRecipe?.name}}" name="name" class="form-control" id="name"
                 placeholder="Name" required>
             </div>
             <input type="hidden" ngModel="{{editRecipe?.id}}" name="id" class="form-control" id="id"
               placeholder="Email">
             <div class="form-group">
-              <label for="rate">Rate</label>
-              <input type="text" ngModel="{{editRecipe?.rate}}" name="rate" class="form-control" id="rate"
-                placeholder="rate" required>
+              <input type="hidden" ngModel="{{editRecipe?.rate}}" name="rate" class="form-control" id="rate"
+                placeholder="rate">
             </div>
             <div class="form-group">
-              <label for="jobTitle">Serves </label>
+              <label for="jobTitle">Dla osób: </label>
               <input type="text" ngModel="{{editRecipe?.serves}}" name="serves" class="form-control" id="serves"
                 placeholder="Serves" required>
             </div>
             <div class="form-group">
-              <label for="preparation">Preparation</label>
+              <label for="preparation">Czas przygotowania: (min)</label>
               <input type="text" ngModel="{{editRecipe?.preparation}}" name="preparation" class="form-control"
                 id="preparation" placeholder=" Preparation" required>
             </div>
             <div class="form-group">
-              <label for="imageUrl">Image url</label>
+              <label for="imageUrl">Zdjęcie dania: </label>
               <input type="text" ngModel="{{editRecipe?.imageUrl}}" name="imageUrl" class="form-control" id="imageUrl"
                 placeholder="Image url" required>
             </div>

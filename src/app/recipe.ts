@@ -1,3 +1,5 @@
+import { Ingredient } from "./ingredient";
+
 export interface Recipe {
     id: number;
     name: string;
@@ -5,4 +7,5 @@ export interface Recipe {
     rate: number;
     serves: number;
     preparation: string;
+    enrolledIngredients: Ingredient[];
 }
