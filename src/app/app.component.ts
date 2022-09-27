@@ -14,16 +14,125 @@ import { Ingredient } from './ingredient';
 export class AppComponent implements OnInit {
   public recipes: Recipe[] = [];
   public ingredients: Ingredient[] = [];
+  public addedIngredients: Ingredient[] = [];
+  public fridgeIngredients: Ingredient[] = [];
+  public lastRecipe: Recipe | undefined;
   public editRecipe: Recipe | undefined;
   public deleteRecipe: Recipe | undefined;
   public editIngredient: Ingredient | undefined;
   public deleteIngredient: Ingredient | undefined;
+  public dictionaryMap = new Map<Recipe, number>();
+
 
   constructor(private recipeService: RecipeService, private ingredientService: IngredientService) { }
 
   ngOnInit(): void {
     this.getRecipes();
     this.getIngredients();
+  }
+
+  public isIngredientInRecipe(fridgeIngredient: Ingredient, recipe: Recipe): boolean {
+    for (const ingredient of recipe.enrolledIngredients)
+      if (ingredient.name.toLowerCase().indexOf(fridgeIngredient.name.toLowerCase()) !== -1) {
+        return true;
+      }
+    return false;
+  }
+
+  public countTheCompatibility(fridge: Ingredient[], recipe: Recipe): number {
+    var counter: number = 0;
+    const lengthOfArray = recipe.enrolledIngredients.length;
+    for (const ingredient of fridge) {
+      if (this.isIngredientInRecipe(ingredient, recipe) === true) {
+        counter++;
+      }
+    }
+    var result = (counter / lengthOfArray) * 100;
+    return result;
+  }
+
+  public clearIngredientsList() {
+    const dictionaryMap = new Map<Recipe, number>();
+    const results: Ingredient[] = [];
+    this.fridgeIngredients = results;
+    this.dictionaryMap = dictionaryMap;
+  }
+
+  public suggestRecipe(): void {
+    const dictionaryMap = new Map<Recipe, number>();
+    for (const recipe of this.recipes) {
+      var compatibility = this.countTheCompatibility(this.fridgeIngredients, recipe).toFixed(2);
+      dictionaryMap.set(recipe, Number(compatibility))
+      console.log(compatibility)
+    }
+    console.log(dictionaryMap)
+    const sortedNumDesc = new Map([...dictionaryMap].sort((a, b) => b[1] - a[1]));
+
+
+    this.dictionaryMap = sortedNumDesc;
+  }
+
+  public addFridgeIngredient(ingredient: Ingredient): void {
+    if (this.fridgeIngredients.indexOf(ingredient) > -1) {
+      alert("Składnik został już dodany!");
+    }
+    else {
+      this.fridgeIngredients.push(ingredient);
+      this.suggestRecipe();
+    }
+  }
+
+  public addIngredientToNewRecipe(ingredient: Ingredient): void {
+    if (this.addedIngredients.indexOf(ingredient) > -1) {
+      alert("Składnik został już dodany!");
+    }
+    else {
+      this.addedIngredients.push(ingredient);
+    }
+  }
+
+  public removeIngredientFromNewRecipe(ingredient: Ingredient): void {
+    if (this.addedIngredients.length === 0) {
+      alert("Lista składników jest pusta!");
+    }
+    else {
+      this.addedIngredients.forEach((element, index) => {
+        if (element == ingredient) {
+          this.addedIngredients.splice(index, 1);
+          this.suggestRecipe();
+        }
+        else {
+          alert("Nie można usunąć składnika, który nie został dodany do listy!");
+        }
+      })
+    }
+  }
+
+  public removeFridgeIngredient(ingredient: Ingredient): void {
+    if (this.fridgeIngredients.length === 0) {
+      alert("Lista składników jest pusta!");
+    } else {
+      this.fridgeIngredients.forEach((element, index) => {
+        if (element == ingredient) {
+          this.fridgeIngredients.splice(index, 1);
+          this.suggestRecipe();
+        }
+        else {
+          alert("Nie można usunąć składnika, który nie został dodany do listy!");
+        }
+      })
+    }
+  }
+
+  public addIngredientToExistingRecipe(recipeId: number, ingredientId: number): void {
+    this.recipeService.enrollIngredientToRecipe(recipeId, ingredientId).subscribe({
+      next: (response: Recipe) => {
+        console.log(response);
+      },
+      error: (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    });
   }
 
   public getRecipes(): void {
@@ -35,6 +144,17 @@ export class AppComponent implements OnInit {
         alert(error.message);
       }
     });
+  }
+
+  public getLastRecipe(): void {
+    this.recipeService.getLastRecipe().subscribe({
+      next: (response: Recipe) => {
+        this.lastRecipe = response;
+      },
+      error: (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    })
   }
 
   public getIngredients(): void {
@@ -152,6 +272,20 @@ export class AppComponent implements OnInit {
     }
   }
 
+  public searchIngredientsFridge(ingredientFridgeKey: string): void {
+    const ingredientFridgeResults: Ingredient[] = [];
+    for (const ingredient of this.ingredients) {
+      if (ingredient.name.toLowerCase().indexOf(ingredientFridgeKey.toLowerCase()) !== -1) {
+        ingredientFridgeResults.push(ingredient);
+
+      }
+    }
+    this.ingredients = ingredientFridgeResults;
+    if (ingredientFridgeResults.length === 0 || !ingredientFridgeKey) {
+      this.getIngredients();
+    }
+  }
+
   public onOpenModalRecipe(mode: string, recipe?: Recipe): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
@@ -188,6 +322,19 @@ export class AppComponent implements OnInit {
     else if (mode === 'deleteIngredient') {
       this.deleteIngredient = ingredient;
       button.setAttribute('data-target', '#deleteIngredientModal');
+    }
+    container!.appendChild(button);
+    button.click();
+  }
+
+  public onOpenModalFridge(mode: string, ingredient?: Ingredient, recipe?: Recipe): void {
+    const container = document.getElementById('main-container');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+    if (mode === 'fridge') {
+      button.setAttribute('data-target', '#fridgeModal');
     }
     container!.appendChild(button);
     button.click();
