@@ -185,79 +185,7 @@
     </div>
   </div>
 
-  <!--Add Recipe Modal OLD-->
-  <!-- <div class="modal fade bd-example-modal-lg" id="addRecipeModal" tabindex="-1" role="dialog"
-    aria-labelledby="addRecipeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addRecipeModalLabel">Dodawanie nowego przepisu</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form #addRecipeForm="ngForm" (ngSubmit)="onAddRecipe(addRecipeForm)">
-            <div class="form-group">
-              <label for="name">Nazwa przepisu: </label>
-              <input type="text" ngModel name="name" class="form-control" id="name"
-                placeholder="Podaj nazwę swojego przepisu . . ." required>
-            </div>
-            <div class="form-group">
-              <label for="serves">Dla osób: </label>
-              <input type="text" ngModel name="serves" class="form-control" id="serves"
-                placeholder="Podaj na ile osób jest przepis . . . " required>
-            </div>
-            <div class="form-group">
-              <label for="preparation">Czas przygotowania:</label>
-              <input type="text" ngModel name="preparation" class="form-control" id="preparation"
-                placeholder="Podaj ile wynosi czas przygotowania . . . " required>
-            </div>
-            <div class="form-group">
-              <input type="hidden" ngModel name="rate" class="form-control" id="rate" placeholder="Rate">
-            </div>
-            <div class="form-group">
-              <label for="imageUrl">Zdjęcie dania:</label>
-              <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl"
-                placeholder="Wklej link do zdjęcia dania . . ." required>
-            </div>
-            <div class="modal-footer">
-              <button type="button" (click)="getLastRecipe()" id="add-recipe-form"
-                class="btn btn-secondary">Zamknij</button>
-              <button [disabled]="addRecipeForm.invalid" type="submit" class="btn btn-primary">Dodaj
-                przepis</button>
-            </div>
-          </form>
-          <form class="form-inline my-2 my-lg-0">
-            <input type="search" (ngModelChange)="searchIngredients(ingredientKey.value)" #ingredientKey="ngModel"
-              ngModel name="ingredientKey" id="searchName" class="form-control mr-sm-2 "
-              placeholder="Wyszukaj składnik . . ." required>
-            <i class="fa fa-search fa-2x float-right " style="color:white"></i>
-          </form>
-          <div>
-            <label for="recipeName">Dodawanie składników do dania: </label>
-            <p></p>
-          </div>
-          <br>
-          <h4>Składniki:</h4>
-          <div class="scrollbar">
-            <div *ngFor="let ingredient of ingredients" class="col-12 col-sm-10 col-md-6 col-xl-6">
-              <div class="card-body row">
-                <div class="col-6">
-                  <a href=""><img src="{{ingredient?.imageUrl}}" alt="" class="img-fluid rounded-circle w-80"></a>
-                </div>
-                <div class="col-6 card-title align-self-center mb-0">
-                  <h5>{{ingredient?.name}}</h5>
-                </div>
-                <button (click)="addIngredientToRecipe(54,ingredient.id)" type="button" class="btn btn-success">Dodaj do
-                  przepisu</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
+
 
   <!--Add Recipe Modal-->
   <div class="modal fade bd-example-modal-lg" id="addRecipeModal" tabindex="-1" role="dialog"
@@ -270,8 +198,8 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form #addRecipeForm="ngForm" (ngSubmit)="onAddRecipe(addRecipeForm)">
-          <div class="modal-body">
+        <div class="modal-body">
+          <form #addRecipeForm="ngForm" (ngSubmit)="onAddRecipe(addRecipeForm)">
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-4">
@@ -342,13 +270,13 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" id="add-recipe-form" class="btn btn-secondary">Zamknij</button>
-            <button [disabled]="addRecipeForm.invalid" type="submit" class="btn btn-primary">Dodaj
-              przepis</button>
-          </div>
-        </form>
+            <div class="modal-footer">
+              <button type="button" id="add-recipe-form" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+              <button [disabled]="addRecipeForm.invalid" type="submit" class="btn btn-primary">Dodaj
+                przepis</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

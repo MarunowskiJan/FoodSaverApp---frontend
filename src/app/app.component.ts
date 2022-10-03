@@ -31,6 +31,38 @@ export class AppComponent implements OnInit {
     this.getIngredients();
   }
 
+
+
+  public addIngredientToExistingRecipe(recipeId: number, ingredientId: number): void {
+    this.recipeService.enrollIngredientToRecipe(recipeId, ingredientId).subscribe({
+      next: (response: Recipe) => {
+        console.log(response);
+      },
+      error: (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    });
+  }
+
+  public onAddRecipe(addRecipeForm: NgForm): void {
+    document.getElementById('add-recipe-form')!.click();
+    this.recipeService.addRecipe(addRecipeForm.value).subscribe({
+      next: (response: Recipe) => {
+        console.log(response);
+        for (const ingredient of this.addedIngredients) {
+          this.addIngredientToExistingRecipe(response.id, ingredient.id)
+        }
+        this.getRecipes();
+        addRecipeForm.reset();
+      },
+      error: (error: HttpErrorResponse) => {
+        alert(error.message);
+        addRecipeForm.reset();
+      }
+    });
+    this.getRecipes();
+  }
+
   public isIngredientInRecipe(fridgeIngredient: Ingredient, recipe: Recipe): boolean {
     for (const ingredient of recipe.enrolledIngredients)
       if (ingredient.name.toLowerCase().indexOf(fridgeIngredient.name.toLowerCase()) !== -1) {
@@ -38,6 +70,9 @@ export class AppComponent implements OnInit {
       }
     return false;
   }
+
+
+
 
   public countTheCompatibility(fridge: Ingredient[], recipe: Recipe): number {
     var counter: number = 0;
@@ -124,16 +159,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public addIngredientToExistingRecipe(recipeId: number, ingredientId: number): void {
-    this.recipeService.enrollIngredientToRecipe(recipeId, ingredientId).subscribe({
-      next: (response: Recipe) => {
-        console.log(response);
-      },
-      error: (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    });
-  }
 
   public getRecipes(): void {
     this.recipeService.getRecipes().subscribe({
@@ -168,20 +193,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public onAddRecipe(addRecipeForm: NgForm): void {
-    document.getElementById('add-recipe-form')!.click();
-    this.recipeService.addRecipe(addRecipeForm.value).subscribe({
-      next: (response: Recipe) => {
-        console.log(response);
-        this.getRecipes();
-        addRecipeForm.reset();
-      },
-      error: (error: HttpErrorResponse) => {
-        alert(error.message);
-        addRecipeForm.reset();
-      }
-    });
-  }
+
 
   public onAddIngredient(addIngredientForm: NgForm): void {
     document.getElementById('add-ingredient-form')!.click();
