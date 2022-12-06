@@ -1,8 +1,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" style="color:white;">Food Saver App</a>
+  <a href="#!" class="navbar-brand" style="color:white;" (click)="getRecipes()">Food Saver App</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
     aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -10,32 +9,32 @@
   <div class="collapse navbar-collapse " id="navbarColor02">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" (click)="getRecipes()">Strona główna <span class=" sr-only">(current)</span></a>
+        <a href="#!" class="nav-link" (click)="getRecipes()">Strona główna <span class=" sr-only">(current)</span></a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+        <a href="#!" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           Przepisy
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" (click)="getRecipes()">Wyświetl wszystkie przepisy</a>
-          <a class="dropdown-item" (click)="onOpenModalRecipe('addRecipe', null!)">Dodaj przepis<span
+          <a href="#!" class="dropdown-item" (click)="getRecipes()">Wyświetl wszystkie przepisy</a>
+          <a href="#!" class="dropdown-item" (click)="onOpenModalRecipe('addRecipe', null!)">Dodaj przepis<span
               class="sr-only">(current)</span></a>
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+        <a href="#!" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           Składniki
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" (click)="getIngredients()">Wyświetl wszystkie składniki</a>
-          <a class="dropdown-item" (click)="onOpenModalIngredient('addIngredient', null!)">Dodaj składnik<span
+          <a href="#!" class="dropdown-item" (click)="getIngredients()">Wyświetl wszystkie składniki</a>
+          <a href="#!" class="dropdown-item" (click)="onOpenModalIngredient('addIngredient', null!)">Dodaj składnik<span
               class="sr-only">(current)</span></a>
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link " (click)="onOpenModalFridge('fridge', null!, null!)" id=" navbarDropdownMenuLink"
+        <a href="#!" class="nav-link " (click)="onOpenModalFridge('fridge', null!, null!)" id=" navbarDropdownMenuLink"
           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Co masz w lodówce?
         </a>
