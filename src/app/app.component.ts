@@ -12,6 +12,8 @@ import { Ingredient } from './ingredient';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  starWidth: number = 0;
+  public recipesDetails: Recipe[] = [];
   public recipes: Recipe[] = [];
   public ingredients: Ingredient[] = [];
   public addedIngredients: Ingredient[] = [];
@@ -31,7 +33,9 @@ export class AppComponent implements OnInit {
     this.getIngredients();
   }
 
-
+  rateProduct(rateValue: number) {
+    this.starWidth = rateValue * 75 / 5;
+  }
 
   public addIngredientToExistingRecipe(recipeId: number, ingredientId: number): void {
     this.recipeService.enrollIngredientToRecipe(recipeId, ingredientId).subscribe({
@@ -318,6 +322,23 @@ export class AppComponent implements OnInit {
     container!.appendChild(button);
     button.click();
   }
+
+  public onOpenModalRecipeDetails(mode: string, recipe: Recipe): void {
+    const results: Recipe[] = [];
+    const container = document.getElementById('main-container');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+    if (mode === 'showDetails') {
+      button.setAttribute('data-target', '#recipeDetailsModal');
+      results.push(recipe);
+    }
+    container!.appendChild(button);
+    button.click();
+    this.recipesDetails = results;
+  }
+
   public onOpenModalIngredient(mode: string, ingredient?: Ingredient): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');

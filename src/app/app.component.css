@@ -3,3 +3,50 @@
   overflow-y: scroll;
 }
 
+.hoverEffect{
+  
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 700;
+  color: gray;
+  overflow: hidden;
+  background: linear-gradient(to right, black, black 50%, gray 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  background-position: 100%;
+  transition: background-position 275ms ease;
+}
+
+.hoverEffect:hover{
+  background-position: 0 100%;
+}
+
+.imageAnimation {
+	-webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+.imageAnimation:hover {
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
+.rateColor{
+  color: black;
+}
+
+.images-size{
+  padding-left: 20%;
+  width: 75%;
+  height: 75%;
+  align-items: center;
+}
+
+.crop{
+  overflow: hidden;
+}
+
