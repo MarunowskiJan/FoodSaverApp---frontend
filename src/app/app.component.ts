@@ -13,6 +13,7 @@ import { Ingredient } from './ingredient';
 })
 export class AppComponent implements OnInit {
   starWidth: number = 0;
+  isRecipe: boolean = true;
   public recipesDetails: Recipe[] = [];
   public recipes: Recipe[] = [];
   public ingredients: Ingredient[] = [];
@@ -31,6 +32,16 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.getRecipes();
     this.getIngredients();
+  }
+
+  public getColor(balance: number): string {
+    if (balance > 75) {
+      return "green";
+    }
+    else if (balance < 25) {
+      return "red";
+    }
+    else return "orange";
   }
 
   rateProduct(rateValue: number) {
@@ -75,9 +86,6 @@ export class AppComponent implements OnInit {
     return false;
   }
 
-
-
-
   public countTheCompatibility(fridge: Ingredient[], recipe: Recipe): number {
     var counter: number = 0;
     const lengthOfArray = recipe.enrolledIngredients.length;
@@ -106,8 +114,6 @@ export class AppComponent implements OnInit {
     }
     console.log(dictionaryMap)
     const sortedNumDesc = new Map([...dictionaryMap].sort((a, b) => b[1] - a[1]));
-
-
     this.dictionaryMap = sortedNumDesc;
   }
 
@@ -148,6 +154,8 @@ export class AppComponent implements OnInit {
   }
 
   public removeFridgeIngredient(ingredient: Ingredient): void {
+    const results: Ingredient[] = [];
+
     if (this.fridgeIngredients.length === 0) {
       alert("Lista składników jest pusta!");
     } else {
@@ -293,7 +301,6 @@ export class AppComponent implements OnInit {
     for (const ingredient of this.ingredients) {
       if (ingredient.name.toLowerCase().indexOf(ingredientFridgeKey.toLowerCase()) !== -1) {
         ingredientFridgeResults.push(ingredient);
-
       }
     }
     this.ingredients = ingredientFridgeResults;
@@ -371,5 +378,12 @@ export class AppComponent implements OnInit {
     }
     container!.appendChild(button);
     button.click();
+  }
+
+  public changeShowList(mode: string): boolean {
+    if (mode === "recipesList") {
+      return this.isRecipe = true;
+    }
+    return this.isRecipe = false;
   }
 }

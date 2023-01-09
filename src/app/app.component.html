@@ -1,7 +1,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a href="#!" class="navbar-brand" style="color:white;" (click)="getRecipes()">Food Saver App</a>
+  <a href="#!" class="navbar-brand" style="color:white;" (click)="changeShowList('recipesList')">Food Saver App</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
     aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -9,7 +9,8 @@
   <div class="collapse navbar-collapse " id="navbarColor02">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a href="#!" class="nav-link" (click)="getRecipes()">Strona główna <span class=" sr-only">(current)</span></a>
+        <a href="#!" class="nav-link" (click)="changeShowList('recipesList')">Strona główna <span
+            class=" sr-only">(current)</span></a>
       </li>
       <li class="nav-item dropdown">
         <a href="#!" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
@@ -17,7 +18,7 @@
           Przepisy
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a href="#!" class="dropdown-item" (click)="getRecipes()">Wyświetl wszystkie przepisy</a>
+          <a href="#!" class="dropdown-item" (click)="changeShowList('recipesList')">Wyświetl wszystkie przepisy</a>
           <a href="#!" class="dropdown-item" (click)="onOpenModalRecipe('addRecipe', null!)">Dodaj przepis<span
               class="sr-only">(current)</span></a>
         </div>
@@ -28,7 +29,9 @@
           Składniki
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a href="#!" class="dropdown-item" (click)="getIngredients()">Wyświetl wszystkie składniki</a>
+          <a href="#!" class="dropdown-item" (click)="changeShowList('ingredientList')">Wyświetl
+            wszystkie
+            składniki</a>
           <a href="#!" class="dropdown-item" (click)="onOpenModalIngredient('addIngredient', null!)">Dodaj składnik<span
               class="sr-only">(current)</span></a>
         </div>
@@ -48,317 +51,63 @@
   </div>
 </nav>
 
-<!--Show Recipes -->
-<div class="container" id="main-container">
-  <br>
-  <h1>Przepisy:</h1>
-  <div class="row">
-    <div *ngFor="let recipe of recipes" class="col-12 col-sm-10 col-md-6 col-xl-6">
-      <div class="card m-b-30">
-        <a href="#!">
-          <div class="card-body row" (click)="onOpenModalRecipeDetails('showDetails', recipe)">
-            <div class="col-6">
-              <div class="imageAnimation">
-                <img src="{{recipe?.imageUrl}}" alt="" class="img-fluid rounded-circle w-80">
-              </div>
-            </div>
-            <div class="col-6 card-title align-self-center mb-0">
-              <h5 class="hoverEffect">{{recipe?.name}}</h5>
-              <div class="rateColor">
-                <p class="m-0"><i class="fa fa-star-o float-right"></i>Ocena: {{recipe?.rate}}</p>
-              </div>
-            </div>
-          </div>
-        </a>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item"><i class="fa fa-users float-right"></i>Dla
-            {{recipe?.serves}} osób
-          </li>
-          <li class="list-group-item"><i class="fa fa-clock-o float-right"></i>Czas przygotowania:
-            {{recipe?.preparation}}
-            minut
-          </li>
-          <li class="list-group-item"><i class="fa fa-pie-chart float-right"></i>
-            <h5>Składniki:</h5>
-            <div *ngFor="let item of recipe.enrolledIngredients">
-              - {{item.name}}
-            </div>
-          </li>
-        </ul>
-        <div class="card-body">
-          <div class="float-right btn-group btn-group-sm">
-            <a (click)="onOpenModalRecipe('editRecipe', recipe)" class="btn btn-primary tooltips" data-placement="top"
-              data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
-            <a (click)="onOpenModalRecipe('deleteRecipe', recipe)" class="btn btn-secondary tooltips"
-              data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fridge -->
-  <div class="modal fade bd-example-modal-lg" id="fridgeModal" tabindex="-1" role="dialog"
-    aria-labelledby="fridgeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header ">
-          <h5 class="modal-title " id="fridgeModalLabel">Zaznacz jakie posiadasz składniki w lodówce a my
-            zaproponujemy
-            Ci danie, które możesz z nich przyrządzić :)</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-md-5">
-                <div>
-                  <label for="recipeName">Wpisz nazwę składnika w wyszukiwarce a następnie dodaj go z listy . .
-                  </label>
-                  <p></p>
+<div *ngIf="isRecipe;then content else other_content">here is ignored</div>
+<ng-template #content><!--Show Recipes -->
+  <div class="container" id="main-container">
+    <br>
+    <br>
+    <h1>Przepisy:</h1>
+    <br>
+    <div class="row">
+      <div *ngFor="let recipe of recipes" class="col-12 col-sm-10 col-md-6 col-xl-6">
+        <div class="card m-b-30">
+          <a href="#!">
+            <div class="card-body row" (click)="onOpenModalRecipeDetails('showDetails', recipe)">
+              <div class="col-6">
+                <div class="imageAnimation">
+                  <img src="{{recipe?.imageUrl}}" alt="" class="img-fluid rounded-circle w-80">
                 </div>
-                <form class="form-inline my-2 my-lg-0">
-                  <input type="search" (ngModelChange)="searchIngredientsFridge(fridgeKey.value)" #fridgeKey="ngModel"
-                    ngModel name="fridgeKey" id="searchName" class="form-control mr-sm-2 "
-                    placeholder="Wyszukaj składnik . . ." required>
-                  <i class="fa fa-search fa-2x float-right " style="color:white"></i>
-                </form>
               </div>
-              <div class="row">
-                <div class="col-md-6 ml-auto">
-                  <h5>Składniki, które posiadasz w lodówce:</h5>
-                  <div *ngFor="let item of fridgeIngredients">
-                    - {{item.name}}
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <button (click)="clearIngredientsList()" type="button" class="btn btn-secondary">Usuń
-                  </button>
+              <div class="col-6 card-title align-self-center mb-0">
+                <h5 class="hoverEffect">{{recipe?.name}}</h5>
+                <div class="rateColor">
+                  <p class="m-0"><i class="fa fa-star-o float-right"></i>Ocena: {{recipe?.rate}}</p>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <br>
-                <h4>Składniki:</h4>
-                <div class="scrollbar">
-                  <div *ngFor="let ingredient of ingredients">
-                    <br>
-                    <div class="row">
-                      <div class="col-3">
-                        <a href=""><img src="{{ingredient?.imageUrl}}" alt="" class="img-fluid rounded-circle w-80"></a>
-                      </div>
-                      <div class="col-4">
-                        <h5>{{ingredient?.name}}</h5>
-                      </div>
-                      <div class="col-2">
-                        <button (click)="addFridgeIngredient(ingredient)" type="button" class="btn btn-success">Dodaj
-                        </button>
-                      </div>
-                      <div class="col-2">
-                        <button (click)="removeFridgeIngredient(ingredient)" type="button" class="btn btn-danger">Usuń
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          </a>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fa fa-users float-right"></i>Dla
+              {{recipe?.serves}} osób
+            </li>
+            <li class="list-group-item"><i class="fa fa-clock-o float-right"></i>Czas przygotowania:
+              {{recipe?.preparation}}
+              minut
+            </li>
+            <li class="list-group-item"><i class="fa fa-pie-chart float-right"></i>
+              <h5>Trzy przykładowe składniki z przepisu:</h5>
+              <div *ngFor="let item of recipe.enrolledIngredients | slice:0:3;">
+                - {{item.name}}
               </div>
-              <div class="col-md-6">
-                <br>
-                <h4>Przepisy:</h4>
-                <div class="scrollbar">
-                  <div *ngFor="let item of dictionaryMap | keyvalue">
-                    <br>
-                    <div class="row">
-                      <div class="col-3">
-                        <a href=""><img src="{{item.key.imageUrl}}" alt="" class="img-fluid rounded-circle w-80"></a>
-                      </div>
-                      <div class="col-4">
-                        <h5>{{item.key.name}}</h5>
-                      </div>
-                      <div class="col-4">
-                        <h5>Zgodność: {{item.value}}%</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            </li>
+          </ul>
+          <div class="card-body">
+            <div class="float-right btn-group btn-group-sm">
+              <a (click)="onOpenModalRecipe('editRecipe', recipe)" class="btn btn-primary tooltips" data-placement="top"
+                data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+              <a (click)="onOpenModalRecipe('deleteRecipe', recipe)" class="btn btn-secondary tooltips"
+                data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!--Add Recipe Modal-->
-  <div class="modal fade bd-example-modal-lg" id="addRecipeModal" tabindex="-1" role="dialog"
-    aria-labelledby="addRecipeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header ">
-          <h5 class="modal-title " id="addRecipeModalLabel">Dodawanie nowego przepisu</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form #addRecipeForm="ngForm" (ngSubmit)="onAddRecipe(addRecipeForm)">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="name">Nazwa przepisu: </label>
-                    <input type="text" ngModel name="name" class="form-control" id="name"
-                      placeholder="Podaj nazwę swojego przepisu . . ." required>
-                  </div>
-                  <div class="form-group">
-                    <label for="serves">Dla osób: </label>
-                    <input type="text" ngModel name="serves" class="form-control" id="serves"
-                      placeholder="Podaj na ile osób jest przepis . . . " required>
-                  </div>
-                  <div class="form-group">
-                    <label for="preparation">Czas przygotowania:</label>
-                    <input type="text" ngModel name="preparation" class="form-control" id="preparation"
-                      placeholder="Podaj ile wynosi czas przygotowania . . . " required>
-                  </div>
-                  <div class="form-group">
-                    <input type="hidden" ngModel name="rate" class="form-control" id="rate" placeholder="Rate">
-                  </div>
-                  <div class="form-group">
-                    <label for="imageUrl">Zdjęcie dania:</label>
-                    <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl"
-                      placeholder="Wklej link do zdjęcia dania . . ." required>
-                  </div>
-                  <h5>Składniki:</h5>
-                  <div *ngFor="let item of addedIngredients">
-                    - {{item.name}}
-                  </div>
-                </div>
-                <div class="col-md-6 ml-auto">
-                  <div>
-                    <label for="recipeName">Dodawanie składników do dania: </label>
-                    <p></p>
-                  </div>
-                  <form class="form-inline my-2 my-lg-0">
-                    <input type="search" (ngModelChange)="searchIngredients(ingredientKey.value)"
-                      #ingredientKey="ngModel" ngModel name="ingredientKey" id="searchName"
-                      class="form-control mr-sm-2 " placeholder="Wyszukaj składnik . . ." required>
-                    <i class="fa fa-search fa-2x float-right " style="color:white"></i>
-                  </form>
-                  <br>
-                  <h4>Składniki:</h4>
-                  <div class="scrollbar">
-                    <div *ngFor="let ingredient of ingredients">
-                      <br>
-                      <div class="row">
-                        <div class="col-3">
-                          <a href=""><img src="{{ingredient?.imageUrl}}" alt=""
-                              class="img-fluid rounded-circle w-80"></a>
-                        </div>
-                        <div class="col-4">
-                          <h5>{{ingredient?.name}}</h5>
-                        </div>
-                        <div class="col-2">
-                          <button (click)="addIngredientToNewRecipe(ingredient)" type="button"
-                            class="btn btn-success">Dodaj </button>
-                        </div>
-                        <div class="col-2">
-                          <button (click)="removeIngredientFromNewRecipe(ingredient)" type="button"
-                            class="btn btn-danger">Usuń
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" id="add-recipe-form" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
-              <button [disabled]="addRecipeForm.invalid" type="submit" class="btn btn-primary">Dodaj
-                przepis</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--Edit Recipe Modal-->
-  <div class="modal fade" id="updateRecipeModal" tabindex="-1" role="dialog" aria-labelledby="recipeEditModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="updateRecipeModalLabel">Edytowanie przepisu: {{editRecipe?.name}}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form #editRecipeForm="ngForm">
-            <div class="form-group">
-              <label for="name">Nazwa przepisu:</label>
-              <input type="text" ngModel="{{editRecipe?.name}}" name="name" class="form-control" id="name"
-                placeholder="Name" required>
-            </div>
-            <input type="hidden" ngModel="{{editRecipe?.id}}" name="id" class="form-control" id="id"
-              placeholder="Email">
-            <div class="form-group">
-              <input type="hidden" ngModel="{{editRecipe?.rate}}" name="rate" class="form-control" id="rate"
-                placeholder="rate">
-            </div>
-            <div class="form-group">
-              <label for="jobTitle">Dla osób: </label>
-              <input type="text" ngModel="{{editRecipe?.serves}}" name="serves" class="form-control" id="serves"
-                placeholder="Serves" required>
-            </div>
-            <div class="form-group">
-              <label for="preparation">Czas przygotowania: (min)</label>
-              <input type="text" ngModel="{{editRecipe?.preparation}}" name="preparation" class="form-control"
-                id="preparation" placeholder=" Preparation" required>
-            </div>
-            <div class="form-group">
-              <label for="imageUrl">Zdjęcie dania: </label>
-              <input type="text" ngModel="{{editRecipe?.imageUrl}}" name="imageUrl" class="form-control" id="imageUrl"
-                placeholder="Image url" required>
-            </div>
-            <div class="modal-footer">
-              <button type="button" id="" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
-              <button (click)="onUpdateRecipe(editRecipeForm.value)" class="btn btn-primary" data-dismiss="modal">Zapisz
-                zmiany</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--Delete Recipe Modal-->
-  <div class="modal fade" id="deleteRecipeModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Delete Recipe</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Jesteś pewien, że chcesz usunąć przepis: {{deleteRecipe?.name}}?</p>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie</button>
-            <button (click)="onDeleteRecipe(deleteRecipe!.id)" class="btn btn-danger" data-dismiss="modal">Tak</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--Show Ingredients -->
+</ng-template>
+<ng-template #other_content><!--Show Ingredients -->
   <div class="container" id="main-container">
     <h1>Składniki:</h1>
+    <br>
     <div class="row">
       <div *ngFor="let ingredient of ingredients" class="col-12 col-sm-10 col-md-6 col-xl-6">
         <div class="card m-b-30">
@@ -382,321 +131,582 @@
         </div>
       </div>
     </div>
+  </div>
+</ng-template>
 
-    <!--Add Ingredient Modal-->
-    <div class="modal fade" id="addIngredientModal" tabindex="-1" role="dialog"
-      aria-labelledby="addIngredientModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="addIngredientModalLabel">Dodawanie nowego składnika</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form #addIngredientForm="ngForm" (ngSubmit)="onAddIngredient(addIngredientForm)">
-              <div class="form-group">
-                <label for="name">Nazwa składnika: </label>
-                <input type="text" ngModel name="name" class="form-control" id="name"
-                  placeholder="Podaj nazwę składnika . . ." required>
-              </div>
-              <div class="form-group">
-                <label for="imageUrl">Zdjęcie składnika:</label>
-                <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl"
-                  placeholder="Wklej link do zdjęcia składnika . . ." required>
-              </div>
-              <div class="modal-footer">
-                <button type="button" id="add-ingredient-form" class="btn btn-secondary"
-                  data-dismiss="modal">Zamknij</button>
-                <button [disabled]="addIngredientForm.invalid" type="submit" class="btn btn-primary">Dodaj
-                  przepis</button>
-              </div>
-            </form>
-          </div>
-        </div>
+<!-- Fridge -->
+<div class="modal fade bd-example-modal-lg" id="fridgeModal" tabindex="-1" role="dialog"
+  aria-labelledby="fridgeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <h5 class="modal-title " id="fridgeModalLabel">Zaznacz jakie posiadasz składniki w lodówce a my
+          zaproponujemy
+          Ci danie, które możesz z nich przyrządzić :)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-    </div>
-
-    <!--Edit Ingredient Modal-->
-    <div class="modal fade" id="updateIngredientModal" tabindex="-1" role="dialog"
-      aria-labelledby="IngredientEditModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="updateIngredientModalLabel">Edytowanie składnika: {{editIngredient?.name}}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form #editIngredientForm="ngForm">
-              <div class="form-group">
-                <label for="name">Nazwa składnika:</label>
-                <input type="text" ngModel="{{editIngredient?.name}}" name="name" class="form-control" id="name"
-                  placeholder="Name" required>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-5">
+              <div>
+                <label for="recipeName">Wpisz nazwę składnika w wyszukiwarce a następnie dodaj go z listy . .
+                </label>
+                <p></p>
               </div>
-              <input type="hidden" ngModel="{{editIngredient?.id}}" name="id" class="form-control" id="id"
-                placeholder="id">
-              <div class="form-group">
-                <label for="imageUrl">Image url</label>
-                <input type="text" ngModel="{{editIngredient?.imageUrl}}" name="imageUrl" class="form-control"
-                  id="imageUrl" placeholder="Image url" required>
+              <form class="form-inline my-2 my-lg-0">
+                <input type="search" (ngModelChange)="searchIngredientsFridge(fridgeKey.value)" #fridgeKey="ngModel"
+                  ngModel name="fridgeKey" id="searchName" class="form-control mr-sm-2 "
+                  placeholder="Wyszukaj składnik . . ." required>
+                <i class="fa fa-search fa-2x float-right " style="color:white"></i>
+              </form>
+            </div>
+            <div class="row">
+              <div class="col-md-6 ml-auto">
+                <h5>Składniki, które posiadasz w lodówce:</h5>
+                <div *ngFor="let item of fridgeIngredients">
+                  - {{item.name}}
+                </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" id="" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
-                <button (click)="onUpdateIngredient(editIngredientForm.value)" class="btn btn-primary"
-                  data-dismiss="modal">Zapisz
-                  zmiany</button>
+              <div class="col-md-4">
+                <button (click)="clearIngredientsList()" type="button" class="btn btn-secondary">Usuń
+                </button>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!--Delete Ingredient Modal-->
-    <div class="modal fade" id="deleteIngredientModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="deleteModalLabel">Usuwanie składnika</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Jesteś pewien, że chcesz usunąć składnik: {{deleteIngredient?.name}}?</p>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie</button>
-              <button (click)="onDeleteIngredient(deleteIngredient!.id)" class="btn btn-danger"
-                data-dismiss="modal">Tak</button>
+          <div class="row">
+            <div class="col-md-6">
+              <br>
+              <h4>Składniki:</h4>
+              <div class="scrollbar">
+                <div *ngFor="let ingredient of ingredients">
+                  <br>
+                  <div class="row">
+                    <div class="col-3">
+                      <a href=""><img src="{{ingredient?.imageUrl}}" alt="" class="img-fluid rounded-circle w-80"></a>
+                    </div>
+                    <div class="col-4">
+                      <h5>{{ingredient?.name}}</h5>
+                    </div>
+                    <div class="col-2">
+                      <button (click)="addFridgeIngredient(ingredient)" type="button" class="btn btn-success">Dodaj
+                      </button>
+                    </div>
+                    <div class="col-2">
+                      <button (click)="removeFridgeIngredient(ingredient)" type="button" class="btn btn-danger">Usuń
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <br>
+              <h4>Przepisy:</h4>
+              <div class="scrollbar">
+                <div *ngFor="let item of dictionaryMap | keyvalue">
+                  <br>
+                  <a href="#!">
+                    <div class="row" (click)="onOpenModalRecipeDetails('showDetails', item.key)">
+                      <div class="col-3">
+                        <a href=""><img src="{{item.key.imageUrl}}" alt="" class="img-fluid rounded-circle w-80"></a>
+                      </div>
+                      <div class="col-4">
+                        <h5>{{item.key.name}}</h5>
+                      </div>
+                      <div class="col-4">
+                        <h5 [ngStyle]="{'color': getColor(item.value)}">
+                          Zgodność: {{item.value}}%</h5>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Recipes details -->
-    <div class="modal fade bd-example-modal-lg" id="recipeDetailsModal" tabindex="-1" role="dialog"
-      aria-labelledby="recipeDetailsModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content" *ngFor="let recipe of recipesDetails">
-          <div class="modal-header">
-            <h5 class="modal-title" id="recipeDetailsModalLabel">Szczegóły przepisu: {{recipe.name}}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="imageAnimation">
-                    <div class="images-size">
-                      <img src="{{recipe?.imageUrl}}" alt="" class="img-thumbnail rounded-circle w-80">
-                    </div>
-                  </div>
+<!--Add Recipe Modal-->
+<div class="modal fade bd-example-modal-lg" id="addRecipeModal" tabindex="-1" role="dialog"
+  aria-labelledby="addRecipeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <h5 class="modal-title " id="addRecipeModalLabel">Dodawanie nowego przepisu</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #addRecipeForm="ngForm" (ngSubmit)="onAddRecipe(addRecipeForm)">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="name">Nazwa przepisu: </label>
+                  <input type="text" ngModel name="name" class="form-control" id="name"
+                    placeholder="Podaj nazwę swojego przepisu . . ." required>
                 </div>
-                <div class="col-md-6">
-                  <br>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h2>Oceń danie</h2>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="crop">
-                        <span class="fa fa-star checked fa-3x"></span>
-                        <span class="fa fa-star checked fa-3x"></span>
-                        <span class="fa fa-star checked fa-3x"></span>
-                        <span class="fa fa-star fa-3x"></span>
-                        <span class="fa fa-star fa-3x"></span>
+                <div class="form-group">
+                  <label for="serves">Dla osób: </label>
+                  <input type="text" ngModel name="serves" class="form-control" id="serves"
+                    placeholder="Podaj na ile osób jest przepis . . . " required>
+                </div>
+                <div class="form-group">
+                  <label for="preparation">Czas przygotowania:</label>
+                  <input type="text" ngModel name="preparation" class="form-control" id="preparation"
+                    placeholder="Podaj ile wynosi czas przygotowania . . . " required>
+                </div>
+                <div class="form-group">
+                  <input type="hidden" ngModel name="rate" class="form-control" id="rate" placeholder="Rate">
+                </div>
+                <div class="form-group">
+                  <label for="imageUrl">Zdjęcie dania:</label>
+                  <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl"
+                    placeholder="Wklej link do zdjęcia dania . . ." required>
+                </div>
+                <h5>Składniki:</h5>
+                <div *ngFor="let item of addedIngredients">
+                  - {{item.name}}
+                </div>
+              </div>
+              <div class="col-md-6 ml-auto">
+                <div>
+                  <label for="recipeName">Dodawanie składników do dania: </label>
+                  <p></p>
+                </div>
+                <form class="form-inline my-2 my-lg-0">
+                  <input type="search" (ngModelChange)="searchIngredients(ingredientKey.value)" #ingredientKey="ngModel"
+                    ngModel name="ingredientKey" id="searchName" class="form-control mr-sm-2 "
+                    placeholder="Wyszukaj składnik . . ." required>
+                  <i class="fa fa-search fa-2x float-right " style="color:white"></i>
+                </form>
+                <br>
+                <h4>Składniki:</h4>
+                <div class="scrollbar">
+                  <div *ngFor="let ingredient of ingredients">
+                    <br>
+                    <div class="row">
+                      <div class="col-3">
+                        <a href=""><img src="{{ingredient?.imageUrl}}" alt="" class="img-fluid rounded-circle w-80"></a>
                       </div>
-                    </div>
-                  </div>
-                  <br>
-                  <div class="row">
-
-                    <div class="col-md-4">
-                      <i class="fa fa-users fa-2x"></i>
-                    </div>
-                    <div class="col-md-4">
-                      <i class="fa fa-clock-o fa-2x"></i>
-                    </div>
-                    <div class="col-md-4">
-                      <i class="fa fa-star-o fa-2x"></i>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h4>{{recipe?.serves}} os.</h4>
-                    </div>
-                    <div class="col-md-4">
-                      <h4>{{recipe?.preparation}} min.</h4>
-                    </div>
-                    <div class="col-md-4">
-                      <h4>
-                        {{recipe?.rate}}
-                      </h4>
+                      <div class="col-4">
+                        <h5>{{ingredient?.name}}</h5>
+                      </div>
+                      <div class="col-2">
+                        <button (click)="addIngredientToNewRecipe(ingredient)" type="button"
+                          class="btn btn-success">Dodaj </button>
+                      </div>
+                      <div class="col-2">
+                        <button (click)="removeIngredientFromNewRecipe(ingredient)" type="button"
+                          class="btn btn-danger">Usuń
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="add-recipe-form" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+            <button [disabled]="addRecipeForm.invalid" type="submit" class="btn btn-primary">Dodaj
+              przepis</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Recipe Modal-->
+<div class="modal fade" id="updateRecipeModal" tabindex="-1" role="dialog" aria-labelledby="recipeEditModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateRecipeModalLabel">Edytowanie przepisu: {{editRecipe?.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editRecipeForm="ngForm">
+          <div class="form-group">
+            <label for="name">Nazwa przepisu:</label>
+            <input type="text" ngModel="{{editRecipe?.name}}" name="name" class="form-control" id="name"
+              placeholder="Name" required>
+          </div>
+          <input type="hidden" ngModel="{{editRecipe?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+          <div class="form-group">
+            <input type="hidden" ngModel="{{editRecipe?.rate}}" name="rate" class="form-control" id="rate"
+              placeholder="rate">
+          </div>
+          <div class="form-group">
+            <label for="jobTitle">Dla osób: </label>
+            <input type="text" ngModel="{{editRecipe?.serves}}" name="serves" class="form-control" id="serves"
+              placeholder="Serves" required>
+          </div>
+          <div class="form-group">
+            <label for="preparation">Czas przygotowania: (min)</label>
+            <input type="text" ngModel="{{editRecipe?.preparation}}" name="preparation" class="form-control"
+              id="preparation" placeholder=" Preparation" required>
+          </div>
+          <div class="form-group">
+            <label for="imageUrl">Zdjęcie dania: </label>
+            <input type="text" ngModel="{{editRecipe?.imageUrl}}" name="imageUrl" class="form-control" id="imageUrl"
+              placeholder="Image url" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+            <button (click)="onUpdateRecipe(editRecipeForm.value)" class="btn btn-primary" data-dismiss="modal">Zapisz
+              zmiany</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Delete Recipe Modal-->
+<div class="modal fade" id="deleteRecipeModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Usuwanie przepisu</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Jesteś pewien, że chcesz usunąć przepis: {{deleteRecipe?.name}}?</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie</button>
+          <button (click)="onDeleteRecipe(deleteRecipe!.id)" class="btn btn-danger" data-dismiss="modal">Tak</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Add Ingredient Modal-->
+<div class="modal fade" id="addIngredientModal" tabindex="-1" role="dialog" aria-labelledby="addIngredientModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addIngredientModalLabel">Dodawanie nowego składnika</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #addIngredientForm="ngForm" (ngSubmit)="onAddIngredient(addIngredientForm)">
+          <div class="form-group">
+            <label for="name">Nazwa składnika: </label>
+            <input type="text" ngModel name="name" class="form-control" id="name"
+              placeholder="Podaj nazwę składnika . . ." required>
+          </div>
+          <div class="form-group">
+            <label for="imageUrl">Zdjęcie składnika:</label>
+            <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl"
+              placeholder="Wklej link do zdjęcia składnika . . ." required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="add-ingredient-form" class="btn btn-secondary"
+              data-dismiss="modal">Zamknij</button>
+            <button [disabled]="addIngredientForm.invalid" type="submit" class="btn btn-primary">Dodaj
+              składnik</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Ingredient Modal-->
+<div class="modal fade" id="updateIngredientModal" tabindex="-1" role="dialog"
+  aria-labelledby="IngredientEditModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateIngredientModalLabel">Edytowanie składnika: {{editIngredient?.name}}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editIngredientForm="ngForm">
+          <div class="form-group">
+            <label for="name">Nazwa składnika:</label>
+            <input type="text" ngModel="{{editIngredient?.name}}" name="name" class="form-control" id="name"
+              placeholder="Name" required>
+          </div>
+          <input type="hidden" ngModel="{{editIngredient?.id}}" name="id" class="form-control" id="id" placeholder="id">
+          <div class="form-group">
+            <label for="imageUrl">Image url</label>
+            <input type="text" ngModel="{{editIngredient?.imageUrl}}" name="imageUrl" class="form-control" id="imageUrl"
+              placeholder="Image url" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+            <button (click)="onUpdateIngredient(editIngredientForm.value)" class="btn btn-primary"
+              data-dismiss="modal">Zapisz
+              zmiany</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Delete Ingredient Modal-->
+<div class="modal fade" id="deleteIngredientModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Usuwanie składnika</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Jesteś pewien, że chcesz usunąć składnik: {{deleteIngredient?.name}}?</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie</button>
+          <button (click)="onDeleteIngredient(deleteIngredient!.id)" class="btn btn-danger"
+            data-dismiss="modal">Tak</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recipes details -->
+<div class="modal fade bd-example-modal-lg" id="recipeDetailsModal" tabindex="-1" role="dialog"
+  aria-labelledby="recipeDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content" *ngFor="let recipe of recipesDetails">
+      <div class="modal-header">
+        <h5 class="modal-title" id="recipeDetailsModalLabel">Szczegóły przepisu: {{recipe.name}}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="imageAnimation">
+                <div class="images-size">
+                  <img src="{{recipe?.imageUrl}}" alt="" class="img-thumbnail rounded-circle w-80">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <br>
               <div class="row">
                 <div class="col-md-6">
+                  <h2>Oceń danie</h2>
+                </div>
+                <div class="col-md-6">
+                  <div class="crop">
+                    <span class="fa fa-star checked fa-3x"></span>
+                    <span class="fa fa-star checked fa-3x"></span>
+                    <span class="fa fa-star checked fa-3x"></span>
+                    <span class="fa fa-star fa-3x"></span>
+                    <span class="fa fa-star fa-3x"></span>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+
+                <div class="col-md-4">
+                  <i class="fa fa-users fa-2x"></i>
+                </div>
+                <div class="col-md-4">
+                  <i class="fa fa-clock-o fa-2x"></i>
+                </div>
+                <div class="col-md-4">
+                  <i class="fa fa-star-o fa-2x"></i>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <h4>{{recipe?.serves}} os.</h4>
+                </div>
+                <div class="col-md-4">
+                  <h4>{{recipe?.preparation}} min.</h4>
+                </div>
+                <div class="col-md-4">
+                  <h4>
+                    {{recipe?.rate}}
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <br>
+              <h4>Składniki:</h4>
+              <div class="scrollbar">
+                <div *ngFor="let item of recipe.enrolledIngredients">
                   <br>
-                  <h4>Składniki:</h4>
-                  <div class="scrollbar">
-                    <div *ngFor="let item of recipe.enrolledIngredients">
-                      <br>
-                      <div class="row">
-                        <div class="col-3">
-                          <a href=""><img src="{{item?.imageUrl}}" alt="" class="img-fluid rounded-circle w-80"></a>
-                        </div>
-                        <div class="col-4">
-                          <h5>{{item?.name}}</h5>
-                        </div>
-                      </div>
+                  <div class="row">
+                    <div class="col-3">
+                      <a href=""><img src="{{item?.imageUrl}}" alt="" class="img-fluid rounded-circle w-80"></a>
+                    </div>
+                    <div class="col-4">
+                      <h5>{{item?.name}}</h5>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <br>
-                  <h4>Przygotowanie krok po kroku:</h4>
-                  <div class="scrollbar">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <br>
+              <h4>Przygotowanie krok po kroku:</h4>
+              <div class="scrollbar">
+                <ol>
+                  <li>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                      facilisis.
+                      Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                      Suspendisse accumsan tempus leo id pretium. </p>
+                    <ol>
+
+                      <li>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                          facilisis.
+                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                          Suspendisse accumsan tempus leo id pretium. </p>
+                      </li>
+                      <li>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                          facilisis.
+                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                          Suspendisse accumsan tempus leo id pretium. </p>
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                      facilisis.
+                      Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                      Suspendisse accumsan tempus leo id pretium. </p>
+                    <ol>
+
+                      <li>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                          facilisis.
+                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                          Suspendisse accumsan tempus leo id pretium. </p>
+                      </li>
+                      <li>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                          facilisis.
+                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                          Suspendisse accumsan tempus leo id pretium. </p>
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                      facilisis.
+                      Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                      Suspendisse accumsan tempus leo id pretium. </p>
                     <ol>
                       <li>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
                           facilisis.
                           Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
                           Suspendisse accumsan tempus leo id pretium. </p>
-                        <ol>
-
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                        </ol>
                       </li>
                       <li>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
                           facilisis.
                           Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
                           Suspendisse accumsan tempus leo id pretium. </p>
-                        <ol>
-
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                        </ol>
-                      </li>
-                      <li>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                          facilisis.
-                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                          Suspendisse accumsan tempus leo id pretium. </p>
-                        <ol>
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                        </ol>
-                      </li>
-                      <li>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                          facilisis.
-                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                          Suspendisse accumsan tempus leo id pretium. </p>
-                      </li>
-                      <li>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                          facilisis.
-                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                          Suspendisse accumsan tempus leo id pretium. </p>
-                        <ol>
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-
-                        </ol>
-                      </li>
-                      <li>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                          facilisis.
-                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                          Suspendisse accumsan tempus leo id pretium. </p>
-                        <ol>
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                          <li>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
-                              facilisis.
-                              Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
-                              Suspendisse accumsan tempus leo id pretium. </p>
-                          </li>
-                        </ol>
                       </li>
                     </ol>
-                  </div>
-                </div>
+                  </li>
+                  <li>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                      facilisis.
+                      Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                      Suspendisse accumsan tempus leo id pretium. </p>
+                  </li>
+                  <li>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                      facilisis.
+                      Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                      Suspendisse accumsan tempus leo id pretium. </p>
+                    <ol>
+                      <li>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                          facilisis.
+                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                          Suspendisse accumsan tempus leo id pretium. </p>
+                      </li>
+                      <li>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                          facilisis.
+                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                          Suspendisse accumsan tempus leo id pretium. </p>
+                      </li>
+
+                    </ol>
+                  </li>
+                  <li>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                      facilisis.
+                      Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                      Suspendisse accumsan tempus leo id pretium. </p>
+                    <ol>
+                      <li>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                          facilisis.
+                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                          Suspendisse accumsan tempus leo id pretium. </p>
+                      </li>
+                      <li>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elementum id quam vitae
+                          facilisis.
+                          Donec at elementum ex. Aenean quis rhoncus magna. Integer ultricies tristique gravida.
+                          Suspendisse accumsan tempus leo id pretium. </p>
+                      </li>
+                    </ol>
+                  </li>
+                </ol>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!--Notification for no recipes-->
-      <div *ngIf="recipes?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
-        <div class="alert alert-info" role="alert">
-          <h4 class="alert-heading">BRAK PRZEPISÓW!</h4>
-          <p>Nie znaleziono żadnych przepisów.</p>
-        </div>
-      </div>
+  <!--Notification for no recipes-->
+  <div *ngIf="recipes?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">BRAK PRZEPISÓW!</h4>
+      <p>Nie znaleziono żadnych przepisów.</p>
+    </div>
+  </div>
 
-      <!--Notification for no ingredients-->
-      <div *ngIf="ingredients?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
-        <div class="alert alert-info" role="alert">
-          <h4 class="alert-heading">BRAK SKŁADNIKÓW!</h4>
-          <p>Nie znaleziono żadnych składników.</p>
-        </div>
-      </div>
+  <!--Notification for no ingredients-->
+  <div *ngIf="ingredients?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">BRAK SKŁADNIKÓW!</h4>
+      <p>Nie znaleziono żadnych składników.</p>
+    </div>
+  </div>
