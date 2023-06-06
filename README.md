@@ -2,7 +2,6 @@
 API of the FoodSaverApp, which was made in Spring Boot and Java.
 
 ## What the application looks like
-Enter this url in browser: http://localhost:8080/swagger-ui/index.html#/
 ![image](https://github.com/MarunowskiJan/FoodSaverApp---frontend/assets/51335901/c5547ab1-8554-4832-bc5e-19eeb52d894a)
 ![image](https://github.com/MarunowskiJan/FoodSaverApp---frontend/assets/51335901/f0645da4-eb6c-4a68-a72a-9f5b0d949e6c)
 ![image](https://github.com/MarunowskiJan/FoodSaverApp---frontend/assets/51335901/8c9147b1-44a4-4f6c-82d3-c3a22164faa1)
