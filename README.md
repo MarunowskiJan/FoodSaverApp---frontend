@@ -1,27 +1,22 @@
-# FoodSaverApp
+# FoodSaverApp-- frontend
+API of the FoodSaverApp, which was made in Spring Boot and Java.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
+## What the application looks like
+Enter this url in browser: http://localhost:8080/swagger-ui/index.html#/
+![image](https://github.com/MarunowskiJan/FoodSaverApp---frontend/assets/51335901/c5547ab1-8554-4832-bc5e-19eeb52d894a)
+![image](https://github.com/MarunowskiJan/FoodSaverApp---frontend/assets/51335901/f0645da4-eb6c-4a68-a72a-9f5b0d949e6c)
+![image](https://github.com/MarunowskiJan/FoodSaverApp---frontend/assets/51335901/8c9147b1-44a4-4f6c-82d3-c3a22164faa1)
+![image](https://github.com/MarunowskiJan/FoodSaverApp---frontend/assets/51335901/b8f9117d-cf0a-4902-a4c4-77828e55460a)
+![image](https://github.com/MarunowskiJan/FoodSaverApp---frontend/assets/51335901/c8644df1-15b7-4438-bd5a-0a7ef317c584)
 
 ## Development server
-
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## User Stories
+- The user is able to create, read, update, delete the recipes or ingredients using this UI.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Technologies
+- Angular
+- TypeScript
+- HTML
+- CSS
